@@ -48,6 +48,24 @@ public class RegisterActivity extends AppCompatActivity {
                 }
                 // todo 做网络请求
 
+                apiService.register(name, password, repassword).enqueue(new Callback<UserResponse>() {
+                    @Override
+                    public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                        if (response.body() != null && response.body().user != null) {
+                            Toast.makeText(RegisterActivity.this, "注册成功：" + response.body().user.nickname,
+                                    Toast.LENGTH_SHORT).show();
+                        } else if (response.body() != null) {
+                            Toast.makeText(RegisterActivity.this, "注册失败：" + response.body().errorMsg,
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserResponse> call, Throwable t) {
+                        Toast.makeText(RegisterActivity.this, "网络失败：" + t.getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
 
             }
         });
